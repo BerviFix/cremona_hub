@@ -1,0 +1,32 @@
+name: cremona_hub
+description: "L'hub di Cremona"
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+dependencies:
+  collection: ^1.18.0
+  flutter:
+    sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+  flutter_widget_from_html: ^0.14.11
+  html_unescape: ^2.0.0
+  http: ^1.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/cremona-hub-icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
