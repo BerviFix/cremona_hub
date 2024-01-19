@@ -59,13 +59,20 @@ class _NewsListScreenState extends State<NewsListScreen> {
                 child: Text('Error: ${snapshot.error}'),
               );
             } else {
-              return ListView.separated(
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                  childAspectRatio: 0.6,
+                ),
+                padding: const EdgeInsets.all(16.0),
                 itemCount: snapshot.data?.length ?? 0,
-                separatorBuilder: (context, index) => const Divider(),
                 itemBuilder: (context, index) {
                   return NewsTile(
                     title: snapshot.data![index].title,
                     image: snapshot.data![index].image ?? '',
+                    date: snapshot.data![index].date,
                   );
                 },
               );

@@ -65,6 +65,7 @@ class _ArchiveCategoryState extends State<ArchiveCategory> {
                 return NewsTile(
                   title: snapshot.data![index].title,
                   image: snapshot.data![index].image ?? '',
+                  date: snapshot.data![index].date,
                 );
               },
             );
