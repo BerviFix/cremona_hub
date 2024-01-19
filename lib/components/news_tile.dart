@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class NewsTile extends StatelessWidget {
   String title;
   String? image;
-  DateTime date;
+  String date;
 
   NewsTile(
       {required this.title, required this.image, required this.date, Key? key})
@@ -23,11 +24,12 @@ class NewsTile extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
-            child: Image.network(
-              image ?? 'Immagine non disponibile',
+            child: CachedNetworkImage(
+              imageUrl: image ?? "",
               width: double.infinity,
               height: 100,
               fit: BoxFit.cover,
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
           const SizedBox(height: 8.0),
@@ -39,7 +41,11 @@ class NewsTile extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
             child: Chip(
-              label: Text("${date.day}/${date.month}/${date.year}"),
+              label: Text(date,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10.0,
+                  )),
               padding: const EdgeInsets.all(0),
             ),
           ),
