@@ -64,7 +64,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 8.0,
                   mainAxisSpacing: 8.0,
-                  childAspectRatio: 0.6,
+                  childAspectRatio: 0.55,
                 ),
                 padding: const EdgeInsets.all(16.0),
                 itemCount: snapshot.data?.length ?? 0,
@@ -73,6 +73,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
                     title: snapshot.data![index].title,
                     image: snapshot.data![index].image ?? '',
                     date: snapshot.data![index].date,
+                    id: snapshot.data![index].id,
                   );
                 },
               );
