@@ -4,8 +4,8 @@ import 'package:cremona_hub/models/category_model.dart';
 
 class CategoriesRepository {
   Future<List<CategoryModel>> getCategoriesList() async {
-    final response = await http
-        .get(Uri.parse('https://www.cremonaoggi.it/wp-json/wp/v2/categories'));
+    final response = await http.get(Uri.parse(
+        'https://www.cremonaoggi.it/wp-json/wp/v2/categories?per_page=100'));
 
     final jsonData = jsonDecode(response.body);
 

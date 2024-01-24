@@ -80,6 +80,23 @@ Icon? _getLeading(String title) {
     'mondo': Icons.public,
     'danza': Icons.sports_kabaddi,
     'eventi': Icons.event,
+    'turismo': Icons.tour,
+    'memoria': Icons.history_edu,
+    'guerra': Icons.military_tech,
+    'interviste': Icons.mic,
+    'editoriale': Icons.menu_book_rounded,
+    'telefonata': Icons.phone,
+    'visita': Icons.person,
+    'lettere': Icons.mail,
+    'nazionali': Icons.flag,
+    'ospedale': Icons.local_hospital,
+    'politica': Icons.gavel,
+    'regionali': Icons.flag,
+    'rubriche': Icons.bookmark,
+    'scuole': Icons.school,
+    'spettacolo': Icons.theater_comedy,
+    'sport': Icons.sports_soccer,
+    'video': Icons.video_collection,
   };
 
   final lowercasedTitle = title.toLowerCase();
