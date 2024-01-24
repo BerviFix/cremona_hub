@@ -56,43 +56,41 @@ class _NewsListScreenState extends State<NewsListScreen> {
           Weather(
             weatherFuture: weatherFuture,
           ),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: _refreshNewsList,
-              child: FutureBuilder(
-                future: newsListFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error: ${snapshot.error}'),
-                    );
-                  } else {
-                    return GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                        childAspectRatio: 0.55,
-                      ),
-                      padding: const EdgeInsets.fromLTRB(16, 130, 16, 16),
-                      itemCount: snapshot.data?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        return NewsTile(
-                          title: snapshot.data![index].title,
-                          image: snapshot.data![index].image ?? '',
-                          date: snapshot.data![index].date,
-                          id: snapshot.data![index].id,
-                        );
-                      },
-                    );
-                  }
-                },
-              ),
+          RefreshIndicator(
+            onRefresh: _refreshNewsList,
+            child: FutureBuilder(
+              future: newsListFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else {
+                  return GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                      childAspectRatio: 0.55,
+                    ),
+                    padding: const EdgeInsets.fromLTRB(16, 130, 16, 16),
+                    itemCount: snapshot.data?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      return NewsTile(
+                        title: snapshot.data![index].title,
+                        image: snapshot.data![index].image ?? '',
+                        date: snapshot.data![index].date,
+                        id: snapshot.data![index].id,
+                      );
+                    },
+                  );
+                }
+              },
             ),
           ),
         ],
