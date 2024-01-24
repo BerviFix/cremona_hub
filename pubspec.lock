@@ -248,6 +248,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.14.11"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      sha256: c3fd9336eb55a38cc1bbd79ab17573113a8deccd0ecbbf926cca3c62803b5c2d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
   fwfh_cached_network_image:
     dependency: transitive
     description:
@@ -821,6 +829,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  weather_animation:
+    dependency: "direct main"
+    description:
+      name: weather_animation
+      sha256: "6d4f6f0395a5d14fabab144a4c1f5f8ea8adbd846909c7f6b8bf83dcddb4dc28"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   web:
     dependency: transitive
     description:
