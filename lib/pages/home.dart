@@ -8,6 +8,7 @@ import 'package:cremona_hub/models/category_model.dart';
 import 'package:cremona_hub/models/news_model.dart';
 import 'package:cremona_hub/repositories/categories_repository.dart';
 import 'package:cremona_hub/repositories/news_list_repository.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class NewsListScreen extends StatefulWidget {
   const NewsListScreen({Key? key}) : super(key: key);
