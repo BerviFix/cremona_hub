@@ -37,7 +37,7 @@ class NewsTile extends StatelessWidget {
               child: CachedNetworkImage(
                 imageUrl: image ?? "",
                 width: double.infinity,
-                height: 100,
+                height: 150,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
@@ -49,7 +49,7 @@ class NewsTile extends StatelessWidget {
                 stripHtmlTags(title),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 14.0,
+                  fontSize: 16.0,
                 ),
               ),
             ),
@@ -60,7 +60,7 @@ class NewsTile extends StatelessWidget {
                 label: Text(date,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 10.0,
+                      fontSize: 12.0,
                     )),
                 padding: const EdgeInsets.all(0),
               ),

@@ -4,13 +4,25 @@ import 'dart:convert';
 
 class WeatherRepository {
   Future<WeatherModel> getWeather() async {
-    final response = await http.get(Uri.parse(
-        'https://api.pirateweather.net/forecast/CJaGp1synE8YuDHvbzmY4t0Zwb5Gbj8A/45.133499,10.026130?&units=ca'));
+    try {
+      final response = await http.get(Uri.parse(
+          'https://api.pirateweather.net/forecast/CJaGp1synE8YuDHvbzmY4t0Zwb5Gbj8A/45.133499,10.026130?&units=ca'));
 
-    final jsonData = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
 
-    WeatherModel currentWeather = WeatherModel.fromJson(jsonData);
+        WeatherModel currentWeather = WeatherModel.fromJson(jsonData);
 
-    return currentWeather;
+        return currentWeather;
+      } else {
+        throw Exception('Failed to load weather data');
+      }
+    } catch (e) {
+      print('Failed to load weather data: $e');
+      // Handle the exception as needed
+      return WeatherModel(
+          icon: '',
+          temperature: 0); // Return an empty WeatherModel on exception
+    }
   }
 }

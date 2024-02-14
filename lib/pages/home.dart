@@ -8,7 +8,8 @@ import 'package:cremona_hub/models/category_model.dart';
 import 'package:cremona_hub/models/news_model.dart';
 import 'package:cremona_hub/repositories/categories_repository.dart';
 import 'package:cremona_hub/repositories/news_list_repository.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:lottie/lottie.dart';
 
 class NewsListScreen extends StatefulWidget {
   const NewsListScreen({Key? key}) : super(key: key);
@@ -24,6 +25,8 @@ class _NewsListScreenState extends State<NewsListScreen> {
   late Future<List<CategoryModel>> categoriesListFuture;
   final WeatherRepository weather = WeatherRepository();
   late Future<WeatherModel> weatherFuture;
+  ConnectivityResult _connectivityResult =
+      ConnectivityResult.none; //  Keep track of connectivity
 
   @override
   void initState() {
@@ -31,6 +34,20 @@ class _NewsListScreenState extends State<NewsListScreen> {
     newsListFuture = listNews.getNewsList();
     categoriesListFuture = listCategories.getCategoriesList();
     weatherFuture = weather.getWeather();
+    _checkConnectivity();
+    Connectivity().onConnectivityChanged.listen((result) {
+      setState(() {
+        _connectivityResult = result;
+      });
+    });
+  }
+
+  // Function to check network connectivity
+  Future<void> _checkConnectivity() async {
+    var result = await Connectivity().checkConnectivity();
+    setState(() {
+      _connectivityResult = result;
+    });
   }
 
   Future<void> _refreshNewsList() async {
@@ -42,60 +59,92 @@ class _NewsListScreenState extends State<NewsListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Image.asset('assets/cremonahub4.png', height: 50),
         backgroundColor: Colors.white,
-        surfaceTintColor: Colors.lime,
-        scrolledUnderElevation: 10,
-      ),
-      drawer: DrawerCat(
-        categoriesListFuture: categoriesListFuture,
-      ),
-      body: Stack(
-        children: [
-          Weather(
-            weatherFuture: weatherFuture,
-          ),
-          RefreshIndicator(
-            onRefresh: _refreshNewsList,
-            child: FutureBuilder(
-              future: newsListFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
-                } else {
-                  return GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8.0,
-                      mainAxisSpacing: 8.0,
-                      childAspectRatio: 0.55,
+        appBar: AppBar(
+          title: Image.asset('assets/cremonahub4.png', height: 50),
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.lime,
+          scrolledUnderElevation: 10,
+          centerTitle: true,
+        ),
+        drawer: _connectivityResult != ConnectivityResult.none
+            ? DrawerCat(
+                categoriesListFuture: categoriesListFuture,
+              )
+            : null,
+        body: _connectivityResult != ConnectivityResult.none
+            ? RefreshIndicator(
+                onRefresh: _refreshNewsList,
+                child: ListView(
+                  children: [
+                    Weather(
+                      weatherFuture: weatherFuture,
                     ),
-                    padding: const EdgeInsets.fromLTRB(16, 130, 16, 16),
-                    itemCount: snapshot.data?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return NewsTile(
-                        title: snapshot.data![index].title,
-                        image: snapshot.data![index].image ?? '',
-                        date: snapshot.data![index].date,
-                        id: snapshot.data![index].id,
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      child: FutureBuilder(
+                        future: newsListFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text('Error: ${snapshot.error}'),
+                            );
+                          } else {
+                            return Wrap(
+                              children: snapshot.data!
+                                  .map((news) => IntrinsicHeight(
+                                        child: NewsTile(
+                                          title: news.title,
+                                          image: news.image ?? '',
+                                          date: news.date,
+                                          id: news.id,
+                                        ),
+                                      ))
+                                  .toList(),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : ListView(
+                children: <Widget>[
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error,
+                            size: 50,
+                            color: Colors.red,
+                          ),
+                          const SizedBox(height: 8), //  Add SizedBox
+                          const Text(
+                            'Nessuna connesione a internet! Controlla che il gatto non stia giocando con il cavo di rete.',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.red,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Lottie.asset(
+                            'assets/no-cat-connection.json',
+                            height: MediaQuery.of(context).size.height * 0.5,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ));
   }
 }
