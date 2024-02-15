@@ -18,8 +18,6 @@ class WeatherRepository {
         throw Exception('Failed to load weather data');
       }
     } catch (e) {
-      print('Failed to load weather data: $e');
-      // Handle the exception as needed
       return WeatherModel(
           icon: '',
           temperature: 0); // Return an empty WeatherModel on exception

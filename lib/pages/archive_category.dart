@@ -46,38 +46,40 @@ class _ArchiveCategoryState extends State<ArchiveCategory> {
           ],
         ),
       ),
-      body: FutureBuilder(
-        future: newsListFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else {
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                childAspectRatio: 0.55,
-              ),
-              padding: const EdgeInsets.all(16.0),
-              itemCount: snapshot.data?.length ?? 0,
-              itemBuilder: (context, index) {
-                return NewsTile(
-                  title: snapshot.data![index].title,
-                  image: snapshot.data![index].image ?? '',
-                  date: snapshot.data![index].date,
-                  id: snapshot.data![index].id,
-                );
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            child: FutureBuilder(
+              future: newsListFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else {
+                  return Wrap(
+                    children: snapshot.data!
+                        .map((news) => IntrinsicHeight(
+                              child: NewsTile(
+                                title: news.title,
+                                image: news.image ?? '',
+                                date: news.date,
+                                id: news.id,
+                                source: news.source,
+                              ),
+                            ))
+                        .toList(),
+                  );
+                }
               },
-            );
-          }
-        },
+            ),
+          ),
+        ],
       ),
     );
   }

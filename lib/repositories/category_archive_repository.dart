@@ -13,8 +13,9 @@ class CategoryArchiveRepository {
 
     final jsonData = jsonDecode(response.body);
 
-    List<NewsModel> newsList =
-        (jsonData as List).map((json) => NewsModel.fromJson(json)).toList();
+    List<NewsModel> newsList = (jsonData as List)
+        .map((json) => NewsModel.fromJson(json, 'Cremona Oggi'))
+        .toList();
 
     return newsList;
   }

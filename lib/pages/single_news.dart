@@ -1,5 +1,6 @@
 import 'package:cremona_hub/main.dart';
 import 'package:cremona_hub/models/single_news_model.dart';
+import 'package:cremona_hub/repositories/news_single_prima_cremona_repository.dart';
 import 'package:cremona_hub/repositories/news_single_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -14,8 +15,11 @@ class SingleNews extends StatefulWidget {
 
 class _SingleNewsState extends State<SingleNews> {
   final NewsSingleRepository singleNews = NewsSingleRepository();
+  final NewsSinglePrimaCremonaRepository singleNewsPrimaCremona =
+      NewsSinglePrimaCremonaRepository();
   late Future<SingleNewsModel> singleNewsFuture;
   late int newsID;
+  late String source;
 
   @override
   void didChangeDependencies() {
@@ -24,9 +28,14 @@ class _SingleNewsState extends State<SingleNews> {
     final args = ModalRoute.of(context)!.settings.arguments as Map?;
     if (args != null) {
       newsID = args['newsID'];
+      source = args['source'];
     }
 
-    singleNewsFuture = singleNews.getSingleNews(newsID);
+    if (source == 'Cremona Oggi') {
+      singleNewsFuture = singleNews.getSingleNews(newsID);
+    } else if (source == 'Prima Cremona') {
+      singleNewsFuture = singleNewsPrimaCremona.getSingleNews(newsID);
+    }
   }
 
   @override

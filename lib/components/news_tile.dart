@@ -7,12 +7,14 @@ class NewsTile extends StatelessWidget {
   String? image;
   String date;
   int id;
+  String? source;
 
   NewsTile(
       {required this.title,
       required this.image,
       required this.date,
       required this.id,
+      this.source,
       Key? key})
       : super(key: key);
 
@@ -27,7 +29,7 @@ class NewsTile extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.pushNamed(context, 'single_news',
-              arguments: {'newsID': id});
+              arguments: {'newsID': id, 'source': source});
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,13 +58,36 @@ class NewsTile extends StatelessWidget {
             const Spacer(),
             Container(
               margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-              child: Chip(
-                label: Text(date,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.0,
-                    )),
-                padding: const EdgeInsets.all(0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Chip(
+                    label: Text(date,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.0,
+                        )),
+                    padding: const EdgeInsets.all(0),
+                  ),
+                  if (source != null)
+                    Row(
+                      children: [
+                        source == 'Cremona Oggi'
+                            ? Icon(Icons.label, color: Colors.red[900])
+                            : source == 'Prima Cremona'
+                                ? Icon(Icons.label, color: Colors.blue)
+                                : SizedBox(),
+                        const SizedBox(width: 5),
+                        Text(
+                          source ?? "",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
               ),
             ),
           ],

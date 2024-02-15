@@ -10,6 +10,7 @@ import 'package:cremona_hub/repositories/categories_repository.dart';
 import 'package:cremona_hub/repositories/news_list_repository.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:lottie/lottie.dart';
+import 'package:intl/intl.dart';
 
 class NewsListScreen extends StatefulWidget {
   const NewsListScreen({Key? key}) : super(key: key);
@@ -95,14 +96,21 @@ class _NewsListScreenState extends State<NewsListScreen> {
                               child: Text('Error: ${snapshot.error}'),
                             );
                           } else {
+                            final dateFormat =
+                                DateFormat('dd MMM yyyy HH:mm', 'it_IT');
+                            final sortedNewsList = snapshot.data!
+                              ..sort((a, b) => dateFormat
+                                  .parse(b.date)
+                                  .compareTo(dateFormat.parse(a.date)));
                             return Wrap(
-                              children: snapshot.data!
+                              children: sortedNewsList
                                   .map((news) => IntrinsicHeight(
                                         child: NewsTile(
                                           title: news.title,
                                           image: news.image ?? '',
                                           date: news.date,
                                           id: news.id,
+                                          source: news.source,
                                         ),
                                       ))
                                   .toList(),
