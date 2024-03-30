@@ -18,7 +18,7 @@ class NewsListRepository {
 
   Future<List<NewsModel>> getNewsList() async {
     final random = Random();
-    final int randomNumber = random.nextInt(50) + 50;
+    final int randomNumber = random.nextInt(16) + 15;
     List<NewsModel> newsList = [];
 
     try {

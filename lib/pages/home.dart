@@ -1,3 +1,4 @@
+import 'package:cremona_hub/components/ad_add.dart';
 import 'package:cremona_hub/components/weather.dart';
 import 'package:cremona_hub/models/weather_model.dart';
 import 'package:cremona_hub/repositories/weather_repository.dart';
@@ -73,86 +74,111 @@ class _NewsListScreenState extends State<NewsListScreen> {
                 categoriesListFuture: categoriesListFuture,
               )
             : null,
-        body: _connectivityResult != ConnectivityResult.none
-            ? RefreshIndicator(
-                onRefresh: _refreshNewsList,
-                child: ListView(
-                  children: [
-                    Weather(
-                      weatherFuture: weatherFuture,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                      child: FutureBuilder(
-                        future: newsListFuture,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (snapshot.hasError) {
-                            return Center(
-                              child: Text('Error: ${snapshot.error}'),
-                            );
-                          } else {
-                            final dateFormat =
-                                DateFormat('dd MMM yyyy HH:mm', 'it_IT');
-                            final sortedNewsList = snapshot.data!
-                              ..sort((a, b) => dateFormat
-                                  .parse(b.date)
-                                  .compareTo(dateFormat.parse(a.date)));
-                            return Wrap(
-                              children: sortedNewsList
-                                  .map((news) => IntrinsicHeight(
-                                        child: NewsTile(
-                                          title: news.title,
-                                          image: news.image ?? '',
-                                          date: news.date,
-                                          id: news.id,
-                                          source: news.source,
-                                        ),
-                                      ))
-                                  .toList(),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : ListView(
-                children: <Widget>[
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.error,
-                            size: 50,
-                            color: Colors.red,
-                          ),
-                          const SizedBox(height: 8), //  Add SizedBox
-                          const Text(
-                            'Nessuna connesione a internet! Controlla che il gatto non stia giocando con il cavo di rete.',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.red,
+        body: Stack(
+          children: [
+            _connectivityResult != ConnectivityResult.none
+                ? Center(
+                    child: RefreshIndicator(
+                      onRefresh: _refreshNewsList,
+                      child: SizedBox(
+                        width: 450,
+                        child: ListView(
+                          children: [
+                            Weather(
+                              weatherFuture: weatherFuture,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          Lottie.asset(
-                            'assets/no-cat-connection.json',
-                            height: MediaQuery.of(context).size.height * 0.5,
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                              child: FutureBuilder(
+                                future: newsListFuture,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Container(
+                                      height:
+                                          MediaQuery.of(context).size.height -
+                                              216,
+                                      alignment: Alignment.center,
+                                      child: const CircularProgressIndicator(),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return Center(
+                                      child: Text('Error: ${snapshot.error}'),
+                                    );
+                                  } else {
+                                    final dateFormat = DateFormat(
+                                        'dd MMM yyyy HH:mm', 'it_IT');
+                                    final sortedNewsList = snapshot.data!
+                                      ..sort((a, b) => dateFormat
+                                          .parse(b.date)
+                                          .compareTo(dateFormat.parse(a.date)));
+                                    List<Widget> finalList = [];
+                                    for (var index = 0;
+                                        index < sortedNewsList.length;
+                                        index++) {
+                                      final news = sortedNewsList[index];
+                                      finalList.add(
+                                        IntrinsicHeight(
+                                          child: NewsTile(
+                                            title: news.title,
+                                            image: news.image ?? '',
+                                            date: news.date,
+                                            id: news.id,
+                                            source: news.source,
+                                          ),
+                                        ),
+                                      );
+                                      if ((index + 1) % 2 == 0) {
+                                        finalList.add(AddAd());
+                                      }
+                                    }
+
+                                    return Wrap(
+                                      children: finalList,
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
+                  )
+                : ListView(
+                    children: <Widget>[
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.error,
+                                size: 50,
+                                color: Colors.red,
+                              ),
+                              const SizedBox(height: 8), //  Add SizedBox
+                              const Text(
+                                'Nessuna connesione a internet! Controlla che il gatto non stia giocando con il cavo di rete.',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.red,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              Lottie.asset(
+                                'assets/no-cat-connection.json',
+                                height:
+                                    MediaQuery.of(context).size.height * 0.5,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ));
+          ],
+        ));
   }
 }
