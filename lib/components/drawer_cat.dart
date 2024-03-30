@@ -74,6 +74,7 @@ Icon? _getLeading(String title) {
     'cronaca': Icons.article,
     'cultura': Icons.book,
     'economia': Icons.euro,
+    'editoriali': Icons.menu_book_rounded,
     'elezioni': Icons.gavel,
     'chiesa': Icons.church,
     'cinema': Icons.movie,

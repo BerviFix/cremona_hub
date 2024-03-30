@@ -20,7 +20,7 @@ class Weather extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: Padding(
-                padding: EdgeInsets.only(top: 50.0),
+                padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,

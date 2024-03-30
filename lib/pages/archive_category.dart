@@ -1,3 +1,4 @@
+import 'package:cremona_hub/components/ad_add.dart';
 import 'package:flutter/material.dart';
 import 'package:cremona_hub/components/news_tile.dart';
 import 'package:cremona_hub/models/news_model.dart';
@@ -46,25 +47,34 @@ class _ArchiveCategoryState extends State<ArchiveCategory> {
           ],
         ),
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: FutureBuilder(
-              future: newsListFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
-                } else {
-                  return Wrap(
-                    children: snapshot.data!
-                        .map((news) => IntrinsicHeight(
+      body: Center(
+        child: SizedBox(
+          width: 450,
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: FutureBuilder(
+                  future: newsListFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height - 105,
+                        alignment: Alignment.center,
+                        child: const CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else {
+                      return Wrap(
+                        children:
+                            snapshot.data!.asMap().entries.expand((entry) {
+                          var index = entry.key;
+                          var news = entry.value;
+                          return [
+                            IntrinsicHeight(
                               child: NewsTile(
                                 title: news.title,
                                 image: news.image ?? '',
@@ -72,14 +82,18 @@ class _ArchiveCategoryState extends State<ArchiveCategory> {
                                 id: news.id,
                                 source: news.source,
                               ),
-                            ))
-                        .toList(),
-                  );
-                }
-              },
-            ),
+                            ),
+                            if ((index + 1) % 2 == 0) AddAd(),
+                          ];
+                        }).toList(),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -91,12 +105,30 @@ Icon? _getIcon(String title) {
     'cronaca': Icons.article,
     'cultura': Icons.book,
     'economia': Icons.euro,
+    'editoriali': Icons.menu_book_rounded,
     'elezioni': Icons.gavel,
     'chiesa': Icons.church,
     'cinema': Icons.movie,
     'mondo': Icons.public,
     'danza': Icons.sports_kabaddi,
     'eventi': Icons.event,
+    'turismo': Icons.tour,
+    'memoria': Icons.history_edu,
+    'guerra': Icons.military_tech,
+    'interviste': Icons.mic,
+    'editoriale': Icons.menu_book_rounded,
+    'telefonata': Icons.phone,
+    'visita': Icons.person,
+    'lettere': Icons.mail,
+    'nazionali': Icons.flag,
+    'ospedale': Icons.local_hospital,
+    'politica': Icons.gavel,
+    'regionali': Icons.flag,
+    'rubriche': Icons.bookmark,
+    'scuole': Icons.school,
+    'spettacolo': Icons.theater_comedy,
+    'sport': Icons.sports_soccer,
+    'video': Icons.video_collection,
   };
 
   final lowercasedTitle = title.toLowerCase();
