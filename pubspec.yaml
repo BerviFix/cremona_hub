@@ -1,7 +1,7 @@
 name: cremona_hub
 description: "L'hub di Cremona"
 publish_to: 'none'
-version: 0.3.4+7
+version: 0.3.5+8
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
-  flutter_widget_from_html: ^0.14.11
+  flutter_widget_from_html: ^0.15.1
   google_maps_flutter: ^2.5.3
   google_mobile_ads: ^5.0.0
   http: ^1.1.2
@@ -25,7 +25,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true
